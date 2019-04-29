@@ -1,0 +1,23 @@
+{
+  "presets": ["react-app"],
+  "plugins": [
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "libraryDirectory": "es",
+        "style": "css"
+      }
+    ],
+    [
+      "named-asset-import",
+      {
+        "loaderMap": {
+          "svg": {
+            "ReactComponent": "@svgr/webpack?-svgo,+ref![path]"
+          }
+        }
+      }
+    ]
+  ]
+}

@@ -1,26 +1,53 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import routes from './routes';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+// import BasicLayout from "./layouts/BasicLayout";
+import User from './pages/User';
+import BasicLayout from './layouts/BasicLayout';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.PureComponent {
+  render() {
+    const renderRoutes = (routes, extraProps = {}, switchProps = {}) => {
+      return routes ? (
+        // <Switch>
+        <div>
+          {routes.map((route, i) => {
+            return (
+              <Route
+                path={route.path}
+                exact
+                key={route.key || i}
+                render={props => {
+                  const childRoutes = renderRoutes(route.routes);
+                  console.log(route.routes);
+                  console.log(childRoutes);
+                  if (route.component) {
+                    return (
+                      <route.component {...props} route={route}>
+                        {childRoutes}
+                      </route.component>
+                    );
+                  } else {
+                    return childRoutes;
+                  }
+                }}
+              />
+            );
+          })}
+          {/* </Switch> */}
+        </div>
+      ) : null;
+    };
+
+    return (
+      <Router>
+        {/* {renderRoutes(routes)} */}
+        <Route path="/" component={BasicLayout}>
+          {/* <Route path="/user" component={User} /> */}
+        </Route>
+      </Router>
+    );
+  }
 }
 
 export default App;
