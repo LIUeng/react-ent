@@ -1,20 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-class BasicLayout extends React.PureComponent {
+class BasicLayout extends React.Component {
   render() {
+    const { children } = this.props;
     return (
       <div>
-        hello first see you
+        这是首页
         <br />
-        <Link to="/">home</Link>
-        <br />
-        <Link to="/user">user</Link>
-        <br />
-        <Link to="/hello">hello</Link>
-        <br />
-        <Link to="/hello/1">1</Link>
-        {this.props.children}
+        <Link to="/user/login">用户登录</Link>
+        <Link to="/hello/1">欢迎界面</Link>
+        {children}
       </div>
     );
   }

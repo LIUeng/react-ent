@@ -2,7 +2,7 @@ import React from 'react';
 
 class User extends React.PureComponent {
   render() {
-    return <span>this is user page</span>;
+    return <span>user 1</span>;
   }
 }
 

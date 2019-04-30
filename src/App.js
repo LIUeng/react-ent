@@ -1,27 +1,53 @@
 import React from 'react';
 import routes from './routes';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-// import BasicLayout from "./layouts/BasicLayout";
-import User from './pages/User';
-import BasicLayout from './layouts/BasicLayout';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 class App extends React.PureComponent {
   render() {
-    const renderRoutes = (routes, extraProps = {}, switchProps = {}) => {
+    function renderRoutes(routes, extraProps = {}, switchProps = {}) {
       return routes ? (
-        // <Switch>
-        <div>
+        <Switch {...switchProps}>
           {routes.map((route, i) => {
+            if (route.redirect) {
+              return (
+                <Redirect
+                  key={route.key || i}
+                  from={route.path}
+                  to={route.redirect}
+                  exact={route.exact}
+                  strict={route.strict}
+                />
+              );
+            }
+            // const RouteRoute = route.Routes ? withRoutes(route) : RouteWithProps;
             return (
               <Route
-                path={route.path}
-                exact
                 key={route.key || i}
+                path={route.path}
+                exact={route.exact}
+                strict={route.strict}
+                sensitive={route.sensitive}
                 render={props => {
-                  const childRoutes = renderRoutes(route.routes);
-                  console.log(route.routes);
-                  console.log(childRoutes);
+                  const childRoutes = renderRoutes(
+                    route.routes,
+                    // {},
+                    // {
+                    //   location: props.location,
+                    // }
+                  );
                   if (route.component) {
+                    // const compatProps = getCompatProps({
+                    //   ...props,
+                    //   ...extraProps,
+                    // });
+                    // const newProps = window.g_plugins.apply('modifyRouteProps', {
+                    //   initialValue: {
+                    //     ...props,
+                    //     ...extraProps,
+                    //     ...compatProps,
+                    //   },
+                    //   args: { route },
+                    // });
                     return (
                       <route.component {...props} route={route}>
                         {childRoutes}
@@ -34,19 +60,11 @@ class App extends React.PureComponent {
               />
             );
           })}
-          {/* </Switch> */}
-        </div>
+        </Switch>
       ) : null;
-    };
+    }
 
-    return (
-      <Router>
-        {/* {renderRoutes(routes)} */}
-        <Route path="/" component={BasicLayout}>
-          {/* <Route path="/user" component={User} /> */}
-        </Route>
-      </Router>
-    );
+    return <Router>{renderRoutes(routes)}</Router>;
   }
 }
 
